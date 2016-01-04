@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Jogo da Memoria</string>
+    <string name="action_settings">Definições</string>
+    <string name="cancel">Cancelar</string>
+    <string name="confirm_exit">Tens a certeza que pretendes sair da aplicação ?</string>
+    <string name="exit">Sair</string>
+    <string name="multiplayer">Multi Jogador</string>
+    <string name="ok">Ok</string>
+    <string name="no">Não</string>
+    <string name="options">Opções</string>
+    <string name="singleplayer">Um Jogador</string>
+    <string name="stats">Estatísticas</string>
+    <string name="yes">Sim</string>
+</resources>
