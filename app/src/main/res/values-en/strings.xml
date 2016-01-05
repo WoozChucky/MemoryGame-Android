@@ -13,4 +13,5 @@
     <string name="stats">Stats</string>
     <string name="yes">Yes</string>
     <string name="select_level_title">Select Level</string>
+    <string name="confirm_exit_game">Are you sure you want to exit current game ?</string>
 </resources>

@@ -1,4 +1,4 @@
-package pt.nunolevezinho.isec.jogodamemoria;
+package pt.nunolevezinho.isec.jogodamemoria.Adapters;
 
 import android.content.Context;
 import android.view.View;
@@ -7,17 +7,19 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 
+import pt.nunolevezinho.isec.jogodamemoria.R;
+
 /**
  * Created by nunol on 1/5/2016.
  */
-public class LevelAdapter extends BaseAdapter {
+public class CardAdapter extends BaseAdapter {
     private Context mContext;
     // references to our images
     private Integer[] mThumbIds = {
             R.drawable.man
     };
 
-    public LevelAdapter(Context c) {
+    public CardAdapter(Context c) {
         mContext = c;
     }
 
@@ -46,7 +48,10 @@ public class LevelAdapter extends BaseAdapter {
             imageView = (ImageView) convertView;
         }
 
+        imageView.setImageBitmap(null);
+
         imageView.setImageResource(mThumbIds[position]);
+
         return imageView;
     }
 }

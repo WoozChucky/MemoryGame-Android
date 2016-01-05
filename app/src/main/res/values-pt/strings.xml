@@ -3,7 +3,7 @@
     <string name="app_name">Jogo da Memoria</string>
     <string name="action_settings">Definições</string>
     <string name="cancel">Cancelar</string>
-    <string name="confirm_exit">Tens a certeza que pretendes sair da aplicação ?</string>
+    <string name="confirm_exit">Tem a certeza que pretendes sair da aplicação ?</string>
     <string name="exit">Sair</string>
     <string name="multiplayer">Multi Jogador</string>
     <string name="ok">Ok</string>
@@ -13,4 +13,5 @@
     <string name="stats">Estatísticas</string>
     <string name="yes">Sim</string>
     <string name="select_level_title">Selecione o Nível</string>
+    <string name="confirm_exit_game">Tem a certeza que pretendes sair do jogo actual ?</string>
 </resources>

@@ -1,4 +1,4 @@
-package pt.nunolevezinho.isec.jogodamemoria;
+package pt.nunolevezinho.isec.jogodamemoria.GameScreens;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +9,8 @@ import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import pt.nunolevezinho.isec.jogodamemoria.R;
 
 
 /**
@@ -43,7 +45,7 @@ public class SPLevelSelect extends AppCompatActivity {
         for (int i = 0; i < totalLevels; i++) {
             levelsBtn[i] = new Button(getApplicationContext());
             levelsBtn[i].setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-            levelsBtn[i].setText(String.valueOf(i));
+            levelsBtn[i].setText(String.valueOf(i + 1));
             levelsBtn[i].setTextSize(25);
             levelsBtn[i].setPadding(50, 25, 10, 25);
             levelsBtn[i].setGravity(View.TEXT_ALIGNMENT_CENTER);
@@ -64,11 +66,11 @@ public class SPLevelSelect extends AppCompatActivity {
                 public void onClick(View v) {
                     // TODO Auto-generated method stub
 
-                    Toast.makeText(getBaseContext(), pos + " Clicked",
+                    Toast.makeText(getBaseContext(), pos + 1 + " Clicked",
                             Toast.LENGTH_SHORT).show();
 
                     Intent intent = new Intent(getApplicationContext(), SinglePlayerGame.class);
-                    intent.putExtra("SelectedLevel", pos);
+                    intent.putExtra("SelectedLevel", pos + 1);
                     startActivity(intent);
 
                 }

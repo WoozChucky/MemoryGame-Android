@@ -1,4 +1,4 @@
-package pt.nunolevezinho.isec.jogodamemoria;
+package pt.nunolevezinho.isec.jogodamemoria.GameScreens;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +12,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import pt.nunolevezinho.isec.jogodamemoria.R;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,13 +30,17 @@ public class MainActivity extends AppCompatActivity {
 
         //First Time Run ?
         sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-        int first = sharedpreferences.getInt("firstRun", 0);
-        Toast.makeText(getApplicationContext(), Integer.toString(first), Toast.LENGTH_LONG).show();
+        int first = sharedpreferences.getInt("fRun", 0);
+        String user = sharedpreferences.getString("username", "Username Not Found");
+        Toast.makeText(getApplicationContext(), user, Toast.LENGTH_SHORT).show();
         if (first == 0) {
+
             //TODO: Insert DialogFragment
             String usernameTemp = "trololo";
+
             SharedPreferences.Editor editor = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE).edit();
-            editor.putInt("firstRun", 1);
+            editor.putInt("fRun", 1);
+            editor.putString("username", usernameTemp);
             editor.apply();
         }
 
