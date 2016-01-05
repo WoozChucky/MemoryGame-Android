@@ -12,4 +12,5 @@
     <string name="singleplayer">Singleplayer</string>
     <string name="stats">Stats</string>
     <string name="yes">Yes</string>
+    <string name="select_level_title">Select Level</string>
 </resources>

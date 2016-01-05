@@ -6,6 +6,25 @@
     android:orientation="vertical"
     android:paddingBottom="16dp"
     android:paddingLeft="16dp"
-    android:paddingRight="16dp">
+    android:paddingRight="16dp"
+    android:weightSum="2">
+
+    <TextView
+        android:id="@+id/selectLevelText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="80dp"
+        android:text="@string/select_level_title"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <GridLayout
+        android:id="@+id/gridLevelSelect"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:layout_weight="1">
+
+    </GridLayout>
 
 </LinearLayout>

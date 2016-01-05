@@ -12,4 +12,5 @@
     <string name="singleplayer">Um Jogador</string>
     <string name="stats">Estatísticas</string>
     <string name="yes">Sim</string>
+    <string name="select_level_title">Selecione o Nível</string>
 </resources>

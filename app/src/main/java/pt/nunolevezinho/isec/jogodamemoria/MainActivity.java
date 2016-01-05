@@ -55,7 +55,6 @@ public class MainActivity extends AppCompatActivity {
         singlePlayer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
                 Intent intent = new Intent(getApplicationContext(), SPLevelSelect.class);
                 startActivity(intent);
             }
