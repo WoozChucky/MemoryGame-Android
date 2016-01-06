@@ -11,7 +11,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import pt.nunolevezinho.isec.jogodamemoria.R;
 
@@ -19,20 +18,19 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String MyPREFERENCES = "MemoryGamePrefs";
     Button singlePlayer;
+    Button multiPlayer;
     SharedPreferences sharedpreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
 
         //First Time Run ?
         sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         int first = sharedpreferences.getInt("fRun", 0);
         String user = sharedpreferences.getString("username", "Username Not Found");
-        Toast.makeText(getApplicationContext(), user, Toast.LENGTH_SHORT).show();
+
         if (first == 0) {
 
             //TODO: Insert DialogFragment
@@ -49,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Creditos", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
@@ -63,6 +61,15 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), SPLevelSelect.class);
                 startActivity(intent);
+            }
+        });
+
+        multiPlayer = (Button) findViewById(R.id.button2);
+        multiPlayer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Intent intent = new Intent(getApplicationContext(), GridActivity.class);
+                //startActivity(intent);
             }
         });
     }

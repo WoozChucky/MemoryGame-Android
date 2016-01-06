@@ -7,8 +7,6 @@ import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.GridLayout;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import pt.nunolevezinho.isec.jogodamemoria.R;
 
@@ -27,15 +25,15 @@ public class SPLevelSelect extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.level_select);
 
-        int totalLevels = 10;
-        int columns = 5;
+        int totalLevels = 8;
+        int columns = 4;
         int rows = totalLevels / columns;
 
         grid = (GridLayout) findViewById(R.id.gridLevelSelect);
 
-        grid.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.FILL_PARENT));
+        //grid.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.FILL_PARENT));
         grid.setOrientation(GridLayout.HORIZONTAL);
-        grid.setPadding(0, 30, 0, 0);
+        grid.setPadding(0, 0, 0, 0);
 
         grid.setColumnCount(columns);
         grid.setRowCount(rows);
@@ -47,13 +45,8 @@ public class SPLevelSelect extends AppCompatActivity {
             levelsBtn[i].setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
             levelsBtn[i].setText(String.valueOf(i + 1));
             levelsBtn[i].setTextSize(25);
-            levelsBtn[i].setPadding(50, 25, 10, 25);
+            //levelsBtn[i].setPadding(50, 25, 10, 25);
             levelsBtn[i].setGravity(View.TEXT_ALIGNMENT_CENTER);
-            //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            //    levelsBtn[i].setBackground(getApplicationContext().getDrawable(R.drawable.man));
-            //} else {
-            //    levelsBtn[i].setBackgroundDrawable(getResources().getDrawable(R.drawable.man));
-            //}
 
             grid.addView(levelsBtn[i]);
         }
@@ -64,11 +57,6 @@ public class SPLevelSelect extends AppCompatActivity {
                 int pos = item;
 
                 public void onClick(View v) {
-                    // TODO Auto-generated method stub
-
-                    Toast.makeText(getBaseContext(), pos + 1 + " Clicked",
-                            Toast.LENGTH_SHORT).show();
-
                     Intent intent = new Intent(getApplicationContext(), SinglePlayerGame.class);
                     intent.putExtra("SelectedLevel", pos + 1);
                     startActivity(intent);

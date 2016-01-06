@@ -18,18 +18,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="40dp"
         android:text="Large Text"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <GridLayout
+    <GridView
         android:id="@+id/gameGrid"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/levelNameText"
         android:layout_gravity="center"
-        android:layout_weight="1"
-        android:background="#db1c1c"
-        android:gravity="center_horizontal"
-        android:stretchMode="columnWidth"></GridLayout>
+        android:layout_marginTop="5dp"
+        android:layout_weight="0"
+        android:alignmentMode="alignBounds"
+        android:columnWidth="65dp"
+        android:horizontalSpacing="1dp"
+        android:orientation="horizontal"
+        android:stretchMode="spacingWidthUniform"
+        android:verticalSpacing="4dp" />
+
 </LinearLayout>
