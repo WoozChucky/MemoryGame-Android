@@ -67,15 +67,23 @@ public class LevelSelect extends AppCompatActivity {
 
                 public void onClick(View v) {
 
-                    if (getIntent().getStringExtra("p2Name") == null) {
-                        Intent intent = new Intent(getApplicationContext(), SinglePlayerGame.class);
-                        intent.putExtra("SelectedLevel", pos + 1);
-                        startActivity(intent);
-                    } else {
+                    if (getIntent().getStringExtra("p2Name") != null) {
                         Intent intent = new Intent(getApplicationContext(), MultiplayerLocalGame.class);
                         intent.putExtra("SelectedLevel", pos + 1);
                         intent.putExtra("p2Name", getIntent().getStringExtra("p2Name"));
                         startActivity(intent);
+                        return;
+                    } else if (getIntent().getIntExtra("mode", -1) != -1) {
+                        Intent intent = new Intent(getApplicationContext(), MultiplayerNetworkGame.class);
+                        intent.putExtra("SelectedLevel", pos + 1);
+                        intent.putExtra("mode", getIntent().getIntExtra("mode", -1));
+                        startActivity(intent);
+                        return;
+                    } else {
+                        Intent intent = new Intent(getApplicationContext(), SinglePlayerGame.class);
+                        intent.putExtra("SelectedLevel", pos + 1);
+                        startActivity(intent);
+                        return;
                     }
                 }
             });

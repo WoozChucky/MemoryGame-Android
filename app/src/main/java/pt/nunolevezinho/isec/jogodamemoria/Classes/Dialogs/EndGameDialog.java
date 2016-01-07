@@ -9,7 +9,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 
-import pt.nunolevezinho.isec.jogodamemoria.Classes.GameType;
+import pt.nunolevezinho.isec.jogodamemoria.Classes.GameObjects.GameType;
 import pt.nunolevezinho.isec.jogodamemoria.R;
 
 /**

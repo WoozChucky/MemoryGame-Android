@@ -4,12 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.GridView;
 import android.widget.TextView;
 
 import pt.nunolevezinho.isec.jogodamemoria.Classes.Game;
-import pt.nunolevezinho.isec.jogodamemoria.Classes.GameType;
+import pt.nunolevezinho.isec.jogodamemoria.Classes.GameObjects.GameType;
 import pt.nunolevezinho.isec.jogodamemoria.R;
 
 public class MultiplayerLocalGame extends AppCompatActivity {
@@ -36,8 +35,6 @@ public class MultiplayerLocalGame extends AppCompatActivity {
         p2.setText(p2Name);
 
         gameGrid = (GridView) findViewById(R.id.gameGridMPLoc);
-
-        Log.e("LEVEL", level + "");
 
         Game game = new Game(getApplicationContext(), level, GameType.MULTIPLAYER_LOCAL, gameGrid, this);
         gameGrid = game.getGrid();

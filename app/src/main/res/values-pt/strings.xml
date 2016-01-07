@@ -30,4 +30,8 @@
     <string name="intruders_disp">Intrusos: %1$d</string>
     <string name="wrong_disp">Tentativas: %1$d</string>
     <string name="now_playing">A jogar: %1$s</string>
+    <string name="create">Criar Jogo</string>
+    <string name="join">Juntar a Jogo</string>
+    <string name="waiting_player">À espera de um jogador...</string>
+    <string name="need_ip">Introduz endereço IP do outro jogador.</string>
 </resources>

@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import pt.nunolevezinho.isec.jogodamemoria.Classes.Dialogs.UsernameInputDialog;
 import pt.nunolevezinho.isec.jogodamemoria.R;
@@ -45,8 +44,9 @@ public class MultiplayerTypeActivity extends AppCompatActivity {
         networkBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO NetworkGame
-                Toast.makeText(getApplicationContext(), "Needs Programming!", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), MultiplayerNetworkType.class);
+                intent.putExtra("type", "MP");
+                startActivity(intent);
             }
         });
     }

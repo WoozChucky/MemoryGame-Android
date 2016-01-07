@@ -12,10 +12,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.Serializable;
+
+import pt.nunolevezinho.isec.jogodamemoria.Adapters.CardAdapter;
 import pt.nunolevezinho.isec.jogodamemoria.Classes.Dialogs.EndGameDialog;
+import pt.nunolevezinho.isec.jogodamemoria.Classes.GameObjects.Deck;
+import pt.nunolevezinho.isec.jogodamemoria.Classes.GameObjects.GameType;
+import pt.nunolevezinho.isec.jogodamemoria.Classes.GameObjects.Theme;
+import pt.nunolevezinho.isec.jogodamemoria.GameScreens.MultiplayerNetworkGame;
 import pt.nunolevezinho.isec.jogodamemoria.R;
 
-public class Game {
+public class Game implements Serializable {
 
     private GameType type;
 
@@ -53,11 +60,12 @@ public class Game {
     private int level;
 
     private Deck deck;
+    private CardAdapter adapter;
 
     public Game(final Context context, int level, final GameType type, final GridView gameGrid, final Activity parentActivity) {
         this.parentActivity = parentActivity;
         this.activityContext = context;
-        this.level = level;
+        this.setLevel(level);
         this.type = type;
         this.gameGrid = gameGrid;
 
@@ -94,44 +102,44 @@ public class Game {
 
         switch (level) {
             case 1:
-                this.deck = new Deck(4, new Theme(Theme.ThemeType.FOOD));
+                this.setDeck(new Deck(4, new Theme(Theme.ThemeType.FOOD)));
                 this.gameGrid.setNumColumns(2);
                 break;
             case 2:
-                this.deck = new Deck(8, new Theme(Theme.ThemeType.ICON));
+                this.setDeck(new Deck(8, new Theme(Theme.ThemeType.ICON)));
                 this.gameGrid.setNumColumns(2);
                 break;
             case 3:
-                this.deck = new Deck(16, new Theme(Theme.ThemeType.OBJECTS));
+                this.setDeck(new Deck(16, new Theme(Theme.ThemeType.OBJECTS)));
                 this.gameGrid.setNumColumns(4);
                 break;
             case 4:
-                this.deck = new Deck(24, new Theme(Theme.ThemeType.ICON));
+                this.setDeck(new Deck(24, new Theme(Theme.ThemeType.ICON)));
                 this.gameGrid.setNumColumns(4);
                 break;
             case 5:
-                this.deck = new Deck(30, new Theme(Theme.ThemeType.OBJECTS));
+                this.setDeck(new Deck(30, new Theme(Theme.ThemeType.OBJECTS)));
                 this.gameGrid.setNumColumns(5);
                 break;
             case 6: //Hardmode - Intruders
-                this.deck = new Deck(16, 1, new Theme(Theme.ThemeType.ICON), new Theme(Theme.ThemeType.OBJECTS));
+                this.setDeck(new Deck(16, 1, new Theme(Theme.ThemeType.ICON), new Theme(Theme.ThemeType.OBJECTS)));
                 this.gameGrid.setNumColumns(4);
                 break;
             case 7: //Hardmode - Intruders
-                this.deck = new Deck(24, 2, new Theme(Theme.ThemeType.OBJECTS), new Theme(Theme.ThemeType.FOOD));
+                this.setDeck(new Deck(24, 2, new Theme(Theme.ThemeType.OBJECTS), new Theme(Theme.ThemeType.FOOD)));
                 this.gameGrid.setNumColumns(4);
                 break;
             case 8: //Hardmode - Intruders
-                this.deck = new Deck(30, 3, new Theme(Theme.ThemeType.FOOD), new Theme(Theme.ThemeType.ICON));
+                this.setDeck(new Deck(30, 3, new Theme(Theme.ThemeType.FOOD), new Theme(Theme.ThemeType.ICON)));
                 this.gameGrid.setNumColumns(4);
                 break;
         }
 
-        this.deck.generateDeck();
+        this.getDeck().generateDeck();
 
-        final CardAdapter adapter = new CardAdapter(this.activityContext, this.deck);
+        setCardAdapter(new CardAdapter(this.activityContext, this.getDeck()));
 
-        this.gameGrid.setAdapter(adapter);
+        this.gameGrid.setAdapter(getCardAdapter());
 
 
         this.gameGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -141,40 +149,60 @@ public class Game {
 
                 ImageView imageView = (ImageView) view; //Image Clicked
 
-                if (deck.getCard1() == null && deck.getCard2() == null) //Turn over first card
+                if (getDeck().getCard1() == null && getDeck().getCard2() == null) //Turn over first card
                 {
-                    adapter.setPositionImage1(position);
-                    imageView.setImageBitmap(CardAdapter.decodeSampledBitmapFromResource(activityContext.getResources(), adapter.getItem(position).getCardFront(), 50, 50));
-                    deck.setCard1(adapter.getItem(position));
-                } else if (deck.getCard1() != null && deck.getCard2() == null) //Turn Over second card
-                {
-                    adapter.setPositionImage2(position);
-                    imageView.setImageBitmap(CardAdapter.decodeSampledBitmapFromResource(activityContext.getResources(), adapter.getItem(position).getCardFront(), 50, 50));
-                    adapter.notifyDataSetChanged();
-                    gameGrid.invalidateViews();
-                    deck.setCard2(adapter.getItem(position));
+                    getCardAdapter().setPositionImage1(position);
+                    imageView.setImageBitmap(CardAdapter.decodeSampledBitmapFromResource(activityContext.getResources(), getCardAdapter().getItem(position).getCardFront(), 50, 50));
+                    getDeck().setCard1(getCardAdapter().getItem(position));
 
-                    if (deck.getCard1().getCardID() == deck.getCard2().getCardID()) {
+                    if (type == GameType.MULTIPLAYER_INTERNET) {
+                        ((MultiplayerNetworkGame) parentActivity).moveMyPlayer(position);
+                    }
+
+                } else if (getDeck().getCard1() != null && getDeck().getCard2() == null) //Turn Over second card
+                {
+                    getCardAdapter().setPositionImage2(position);
+                    imageView.setImageBitmap(CardAdapter.decodeSampledBitmapFromResource(activityContext.getResources(), getCardAdapter().getItem(position).getCardFront(), 50, 50));
+                    getCardAdapter().notifyDataSetChanged();
+                    gameGrid.invalidateViews();
+                    getDeck().setCard2(getCardAdapter().getItem(position));
+
+                    if (type == GameType.MULTIPLAYER_INTERNET) {
+                        ((MultiplayerNetworkGame) parentActivity).moveMyPlayer(position);
+                    }
+
+                    if (getDeck().getCard1().getCardID() == getDeck().getCard2().getCardID()) {
+                        getCardAdapter().getCardsCompleted().add(getCardAdapter().getPositionImage1());
+                        getCardAdapter().getCardsCompleted().add(getCardAdapter().getPositionImage2());
+                        getDeck().setCard1(null);
+                        getDeck().setCard2(null);
+                        getCardAdapter().setPositionImage1(null);
+                        getCardAdapter().setPositionImage2(null);
+
                         //Increment Stats and Keep Playing
-                        if (type == GameType.MULTIPLAYER_LOCAL) {
-                            if (deck.getOtherTheme() != null) { //Game With Intruders
-                                if (deck.getCard1().getTheme().getType() == deck.getOtherTheme().getType() && deck.getCard2().getTheme().getType() == deck.getOtherTheme().getType()) {
+                        if (type == GameType.MULTIPLAYER_LOCAL || type == GameType.MULTIPLAYER_INTERNET) {
+                            if (getDeck().getOtherTheme() != null) { //Game With Intruders
+                                if (getDeck().getCard1().getTheme().getType() == getDeck().getOtherTheme().getType() && getDeck().getCard2().getTheme().getType() == getDeck().getOtherTheme().getType()) {
                                     //Intruder Found
                                     switch (currentlyPlaying) {
+                                        case MultiplayerNetworkGame.ME:
                                         case 1000: //Player1
                                             p1intruders++;
                                             break;
 
+                                        case MultiplayerNetworkGame.OTHER:
                                         case 2000: //Player2
                                             p2intruders++;
                                             break;
                                     }
                                 } else {
                                     switch (currentlyPlaying) {
+                                        case MultiplayerNetworkGame.ME:
                                         case 1000: //Player1
                                             p1Score++;
                                             break;
 
+                                        case MultiplayerNetworkGame.OTHER:
                                         case 2000: //Player2
                                             p2Score++;
                                             break;
@@ -187,10 +215,12 @@ public class Game {
                             } else //Game Without Intruders
                             {
                                 switch (currentlyPlaying) {
+                                    case MultiplayerNetworkGame.ME:
                                     case 1000: //Player1
                                         p1Score++;
                                         break;
 
+                                    case MultiplayerNetworkGame.OTHER:
                                     case 2000: //Player2
                                         p2Score++;
                                         break;
@@ -203,8 +233,8 @@ public class Game {
                             //Log.e("Card 1 Theme ", deck.getCard1().getTheme().getType().toString());
                             //Log.e("OtherTheme ", deck.getOtherTheme().getType().toString());
 
-                            if (deck.getOtherTheme() != null) { //Game With Intruders
-                                if (deck.getCard1().getTheme().getType() == deck.getOtherTheme().getType() && deck.getCard2().getTheme().getType() == deck.getOtherTheme().getType()) {
+                            if (getDeck().getOtherTheme() != null) { //Game With Intruders
+                                if (getDeck().getCard1().getTheme().getType() == getDeck().getOtherTheme().getType() && getDeck().getCard2().getTheme().getType() == getDeck().getOtherTheme().getType()) {
                                     //Intruder Found
                                     intruders++;
                                     Log.e("Intruders:", intruders + "");
@@ -220,12 +250,7 @@ public class Game {
                             }
                         }
 
-                        adapter.cardsCompleted.add(adapter.getPositionImage1());
-                        adapter.cardsCompleted.add(adapter.getPositionImage2());
-                        deck.setCard1(null);
-                        deck.setCard2(null);
-                        adapter.setPositionImage1(null);
-                        adapter.setPositionImage2(null);
+
                     } else {
 
                         if (type == GameType.SINGLEPLAYER) {
@@ -235,12 +260,14 @@ public class Game {
                         //Increment Stats, Change Player
                         if (type == GameType.MULTIPLAYER_LOCAL) {
                             switch (currentlyPlaying) {
+                                case MultiplayerNetworkGame.ME:
                                 case 1000: //Player1
                                     p1wrong++;
                                     currentlyPlaying = p2ID;
                                     Toast.makeText(parentActivity.getApplicationContext(), String.format(parentActivity.getResources().getString(R.string.now_playing), p2Name.getText()), Toast.LENGTH_SHORT).show();
                                     break;
 
+                                case MultiplayerNetworkGame.OTHER:
                                 case 2000: //Player2
                                     p2wrong++;
                                     currentlyPlaying = p1ID;
@@ -255,10 +282,10 @@ public class Game {
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                deck.setCard1(null);
-                                deck.setCard2(null);
-                                adapter.setPositionImage1(null);
-                                adapter.setPositionImage2(null);
+                                getDeck().setCard1(null);
+                                getDeck().setCard2(null);
+                                getCardAdapter().setPositionImage1(null);
+                                getCardAdapter().setPositionImage2(null);
                                 gameGrid.invalidateViews();
                             }
                         }, 750);
@@ -266,14 +293,14 @@ public class Game {
                 }
 
                 if (type == GameType.SINGLEPLAYER) {
-                    if (score == (deck.getNumCards() / 2) - deck.getIntruders()) {
+                    if (score == (getDeck().getNumCards() / 2) - getDeck().getIntruders()) {
 
                         SharedPreferences sharedpreferences = parentActivity.getSharedPreferences("MemoryGamePrefs", Context.MODE_PRIVATE);
                         EndGameDialog gDialog = new EndGameDialog(type, parentActivity, wrong, sharedpreferences.getString("username", "Username Not Found"), intruders);
                         gDialog.show();
                     }
-                } else if (type == GameType.MULTIPLAYER_LOCAL) {
-                    if (p1Score + p2Score == (deck.getNumCards() / 2) - deck.getIntruders()) {
+                } else if (type == GameType.MULTIPLAYER_LOCAL || type == GameType.MULTIPLAYER_INTERNET) {
+                    if (p1Score + p2Score == (getDeck().getNumCards() / 2) - getDeck().getIntruders()) {
 
                         Log.e("Finished MP Local Game", "TRUE CARALhO");
 
@@ -288,16 +315,17 @@ public class Game {
 
                         gDialog.show();
                     }
+                    p1scoreTV.setText(String.format(parentActivity.getResources().getString(R.string.score_disp), p1Score));
+                    p2scoreTV.setText(String.format(parentActivity.getResources().getString(R.string.score_disp), p2Score));
+
+                    p1wrongTV.setText(String.format(parentActivity.getResources().getString(R.string.wrong_disp), p1wrong));
+                    p2wrongTV.setText(String.format(parentActivity.getResources().getString(R.string.wrong_disp), p2wrong));
+
+                    p1intrudersTV.setText(String.format(parentActivity.getResources().getString(R.string.intruders_disp), p1intruders));
+                    p2intrudersTV.setText(String.format(parentActivity.getResources().getString(R.string.intruders_disp), p2intruders));
                 }
 
-                p1scoreTV.setText(String.format(parentActivity.getResources().getString(R.string.score_disp), p1Score));
-                p2scoreTV.setText(String.format(parentActivity.getResources().getString(R.string.score_disp), p2Score));
 
-                p1wrongTV.setText(String.format(parentActivity.getResources().getString(R.string.wrong_disp), p1wrong));
-                p2wrongTV.setText(String.format(parentActivity.getResources().getString(R.string.wrong_disp), p2wrong));
-
-                p1intrudersTV.setText(String.format(parentActivity.getResources().getString(R.string.intruders_disp), p1intruders));
-                p2intrudersTV.setText(String.format(parentActivity.getResources().getString(R.string.intruders_disp), p2intruders));
 
             }
         });
@@ -305,5 +333,29 @@ public class Game {
 
     public GridView getGrid() {
         return gameGrid;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public Deck getDeck() {
+        return deck;
+    }
+
+    public void setDeck(Deck deck) {
+        this.deck = deck;
+    }
+
+    public CardAdapter getCardAdapter() {
+        return adapter;
+    }
+
+    public void setCardAdapter(CardAdapter adapter) {
+        this.adapter = adapter;
     }
 }

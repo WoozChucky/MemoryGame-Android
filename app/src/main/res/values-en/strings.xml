@@ -30,4 +30,8 @@
     <string name="wrong_disp">Wrong: %1$d</string>
     <string name="intruders_disp">Intruders: %1$d</string>
     <string name="now_playing">Now playing: %1$s</string>
+    <string name="create">Create Game</string>
+    <string name="join">Join Game</string>
+    <string name="waiting_player">Waiting for player...</string>
+    <string name="need_ip">Insert other player IP Address</string>
 </resources>
