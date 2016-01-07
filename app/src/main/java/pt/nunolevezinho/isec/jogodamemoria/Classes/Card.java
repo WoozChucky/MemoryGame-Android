@@ -9,10 +9,16 @@ public class Card {
     private int cardID;
     private int cardFront;
     private int cardBack = R.drawable.card_back;
+    private Theme theme;
 
-    public Card(int id, int front) {
+    public Card(int id, Theme theme, int front) {
         setCardID(id);
         setCardFront(front);
+        this.theme = theme;
+    }
+
+    public Theme getTheme() {
+        return theme;
     }
 
     public int getCardID() {

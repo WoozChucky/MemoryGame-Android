@@ -1,12 +1,15 @@
 package pt.nunolevezinho.isec.jogodamemoria.GameScreens;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.GridLayout;
+import android.widget.TextView;
 
 import pt.nunolevezinho.isec.jogodamemoria.R;
 
@@ -14,9 +17,10 @@ import pt.nunolevezinho.isec.jogodamemoria.R;
 /**
  * Created by nunol on 1/4/2016.
  */
-public class SPLevelSelect extends AppCompatActivity {
+public class LevelSelect extends AppCompatActivity {
 
     GridLayout grid;
+    TextView title;
     Button[] levelsBtn;
     int item;
 
@@ -30,6 +34,7 @@ public class SPLevelSelect extends AppCompatActivity {
         int rows = totalLevels / columns;
 
         grid = (GridLayout) findViewById(R.id.gridLevelSelect);
+        title = (TextView) findViewById(R.id.selectLevelText);
 
         //grid.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.FILL_PARENT));
         grid.setOrientation(GridLayout.HORIZONTAL);
@@ -45,9 +50,13 @@ public class SPLevelSelect extends AppCompatActivity {
             levelsBtn[i].setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
             levelsBtn[i].setText(String.valueOf(i + 1));
             levelsBtn[i].setTextSize(25);
-            //levelsBtn[i].setPadding(50, 25, 10, 25);
-            levelsBtn[i].setGravity(View.TEXT_ALIGNMENT_CENTER);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                levelsBtn[i].setBackground(getDrawable(R.drawable.level_choose));
+            } else {
+                levelsBtn[i].setBackgroundDrawable(getResources().getDrawable(R.drawable.level_choose));
+            }
 
+            levelsBtn[i].setGravity(Gravity.CENTER);
             grid.addView(levelsBtn[i]);
         }
 
@@ -57,10 +66,17 @@ public class SPLevelSelect extends AppCompatActivity {
                 int pos = item;
 
                 public void onClick(View v) {
-                    Intent intent = new Intent(getApplicationContext(), SinglePlayerGame.class);
-                    intent.putExtra("SelectedLevel", pos + 1);
-                    startActivity(intent);
 
+                    if (getIntent().getStringExtra("p2Name") == null) {
+                        Intent intent = new Intent(getApplicationContext(), SinglePlayerGame.class);
+                        intent.putExtra("SelectedLevel", pos + 1);
+                        startActivity(intent);
+                    } else {
+                        Intent intent = new Intent(getApplicationContext(), MultiplayerLocalGame.class);
+                        intent.putExtra("SelectedLevel", pos + 1);
+                        intent.putExtra("p2Name", getIntent().getStringExtra("p2Name"));
+                        startActivity(intent);
+                    }
                 }
             });
         }

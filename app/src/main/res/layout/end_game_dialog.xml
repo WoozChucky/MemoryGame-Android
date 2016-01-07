@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/dialog_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:background="@drawable/level_complete_bg"
+    android:orientation="vertical"
+    android:weightSum="2">
+
+    <TextView
+        android:id="@+id/victory_str"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_weight="0.1"
+        android:capitalize="characters"
+        android:gravity="center_horizontal"
+        android:labelFor="@id/dialog_layout"
+        android:text="@string/victory"
+        android:textSize="25dp"
+        android:textStyle="normal|bold"
+        android:typeface="monospace" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="245dp"
+        android:layout_weight="1.2"
+        android:orientation="vertical"
+        android:weightSum="2">
+
+        <TextView
+            android:id="@+id/info_text"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="40dp"
+            android:layout_weight="0.5"
+            android:capitalize="characters"
+            android:gravity="center_horizontal"
+            android:labelFor="@id/dialog_layout"
+            android:paddingLeft="25dp"
+            android:paddingRight="25dp"
+            android:text="lol"
+            android:textSize="25dp"
+            android:textStyle="normal" />
+
+        <Button
+            android:id="@+id/ok_btn"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="5dp"
+            android:layout_weight="1.5"
+            android:background="@drawable/green_little_button"
+            android:paddingLeft="25dp"
+            android:paddingRight="25dp"
+            android:text="@string/ok" />
+    </LinearLayout>
+
+    <!-- android:background="@drawable/username" -->
+</LinearLayout>

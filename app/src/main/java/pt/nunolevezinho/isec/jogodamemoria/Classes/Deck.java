@@ -1,11 +1,7 @@
 package pt.nunolevezinho.isec.jogodamemoria.Classes;
 
-import android.content.Context;
-
 import java.util.ArrayList;
 import java.util.Collections;
-
-import pt.nunolevezinho.isec.jogodamemoria.R;
 
 /**
  * Created by nunol on 1/5/2016.
@@ -15,45 +11,59 @@ public class Deck {
     private ArrayList<Card> cards;
     private int numCards;
     private int numPairs;
-
+    private int intrudes;
     private Card card1;
     private Card card2;
+    private Theme theme;
+    private Theme otherTheme;
 
-    private int[] myImageList = new int[]{R.drawable.apple, R.drawable.cake, R.drawable.chococake,
-            R.drawable.coffee, R.drawable.food, R.drawable.hamburger, R.drawable.jar,
-            R.drawable.kebab, R.drawable.mix, R.drawable.nukacola, R.drawable.nuts,
-            R.drawable.orange, R.drawable.ricecakes, R.drawable.salada, R.drawable.soccercake};
 
-    public Deck(int numCards) {
+    public Deck(int numCards, Theme theme) {
         this.cards = new ArrayList<>();
         this.numCards = numCards;
         this.numPairs = numCards / 2;
         setCard1(null);
         setCard2(null);
+        intrudes = 0;
+        this.theme = theme;
+        this.otherTheme = null;
     }
 
-    //TODO: Implement Intruders (Game Class, Deck Class, Card Class)
-    public Deck(int numCards, int intruders) {
+    public Deck(int numCards, int intruders, Theme theme, Theme other) {
         this.cards = new ArrayList<>();
         this.numCards = numCards;
         this.numPairs = numCards / 2;
         setCard1(null);
         setCard2(null);
+        this.intrudes = intruders;
+        this.theme = theme;
+        this.otherTheme = other;
     }
 
-    public void generateDeck(Context context) {
+    public void generateDeck() {
         ArrayList<Card> tempCards = new ArrayList<>();
         Card a, b;
 
-        for (int i = 0, c = 0; i < numPairs; i++, c += 2) {
-            tempCards.add(new Card(i, myImageList[i]));
-            tempCards.add(new Card(i, myImageList[i]));
+        int i = 0;
+
+        for (i = 0; i < numPairs - intrudes; i++) {
+            tempCards.add(new Card(i, theme, theme.getImageList()[i]));
+            tempCards.add(new Card(i, theme, theme.getImageList()[i]));
+        }
+
+        for (int x = 0; x < intrudes; x++) {
+            i++;
+            tempCards.add(new Card(i, otherTheme, otherTheme.getImageList()[x]));
+            tempCards.add(new Card(i, otherTheme, otherTheme.getImageList()[x]));
         }
 
         Collections.shuffle(tempCards);
 
         cards = (ArrayList<Card>) tempCards.clone();
+    }
 
+    public int getIntruders() {
+        return intrudes;
     }
 
     public int getNumCards() {
@@ -89,5 +99,13 @@ public class Deck {
 
     public void setCard2(Card card2) {
         this.card2 = card2;
+    }
+
+    public Theme getMainTheme() {
+        return theme;
+    }
+
+    public Theme getOtherTheme() {
+        return otherTheme;
     }
 }

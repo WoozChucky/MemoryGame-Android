@@ -23,10 +23,6 @@ public class CardAdapter extends BaseAdapter {
     private Context mContext;
     private Deck deck;
     private Integer positionImage1, positionImage2;
-    private int[] myImageList = new int[]{R.drawable.apple, R.drawable.cake, R.drawable.chococake,
-            R.drawable.coffee, R.drawable.food, R.drawable.hamburger, R.drawable.jar,
-            R.drawable.kebab, R.drawable.mix, R.drawable.nukacola, R.drawable.nuts,
-            R.drawable.orange, R.drawable.ricecakes, R.drawable.salada, R.drawable.soccercake};
 
     public CardAdapter(Context c, Deck deck) {
         mContext = c;

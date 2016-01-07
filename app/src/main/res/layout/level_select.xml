@@ -11,7 +11,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:weightSum="2"
-    tools:context=".GameScreens.SPLevelSelect">
+    tools:context=".GameScreens.LevelSelect">
 
     <TextView
         android:id="@+id/selectLevelText"
@@ -19,6 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="80dp"
+        android:background="@drawable/title_portrait"
         android:clickable="false"
         android:gravity="center"
         android:text="@string/select_level_title"
@@ -29,10 +30,11 @@
         android:layout_width="wrap_content"
         android:layout_height="250dp"
         android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
         android:layout_weight="0"
         android:alignmentMode="alignBounds"
-        android:background="#ff0000"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="20dp">
 
     </GridLayout>
 

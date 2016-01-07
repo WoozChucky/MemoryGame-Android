@@ -14,4 +14,20 @@
     <string name="yes">Yes</string>
     <string name="select_level_title">Select Level</string>
     <string name="confirm_exit_game">Are you sure you want to exit current game ?</string>
+    <string name="victory">Victory</string>
+    <string name="local">Same Device</string>
+    <string name="internet">Network</string>
+    <string name="input_username">Welcome! Since this is your first run, we ask you for your Username.</string>
+    <string name="success">Success</string>
+    <string name="no_input">Error! Please insert something.</string>
+    <string name="insertUsername">Insert username here...</string>
+    <string name="input_usernamep2">Please insert player 2 username.</string>
+    <string name="victory_mp">Victory %1s! You guessed more cards than your opponent!</string>
+    <string name="victory_sp">Victory %1$s! You guessed all cards in %2$d attemps!</string>
+    <string name="victory_sp_intruders">Victory %1$s! You guessed all cards in %2$d attemps, having found %3$d intruders!</string>
+    <string name="match_draw">Draw!</string>
+    <string name="score_disp">Score: %1$d</string>
+    <string name="wrong_disp">Wrong: %1$d</string>
+    <string name="intruders_disp">Intruders: %1$d</string>
+    <string name="now_playing">Now playing: %1$s</string>
 </resources>

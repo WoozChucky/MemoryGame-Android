@@ -14,4 +14,20 @@
     <string name="yes">Sim</string>
     <string name="select_level_title">Selecione o Nível</string>
     <string name="confirm_exit_game">Tem a certeza que pretendes sair do jogo actual ?</string>
+    <string name="victory">Vitória</string>
+    <string name="local">Mesmo Dispositivo</string>
+    <string name="internet">Rede</string>
+    <string name="input_username">Bem Vindo! Como é a sua primeira vez a jogar o Jogo da Memória, pedimos que por favor introduza o seu nome de utilizador.</string>
+    <string name="success">Sucesso</string>
+    <string name="no_input">Erro! Por favor preencha o campo.</string>
+    <string name="insertUsername">Introduz o nome de utilizador...</string>
+    <string name="input_usernamep2">Por favor introduza o nome de 2 jogador.</string>
+    <string name="victory_mp">Vitória %1$s! Acertaste mais cartas que o teu adversário!</string>
+    <string name="victory_sp">Vitória %1$s! Acertaste todas as cartas em %2$d tentativas!</string>
+    <string name="victory_sp_intruders">Vitória %1$s! Acertaste todas as cartas em %2$d tentativas, e encontraste %3$d pares de intrusos!</string>
+    <string name="match_draw">Empate!</string>
+    <string name="score_disp">Pontuação: %1$d</string>
+    <string name="intruders_disp">Intrusos: %1$d</string>
+    <string name="wrong_disp">Tentativas: %1$d</string>
+    <string name="now_playing">A jogar: %1$s</string>
 </resources>
