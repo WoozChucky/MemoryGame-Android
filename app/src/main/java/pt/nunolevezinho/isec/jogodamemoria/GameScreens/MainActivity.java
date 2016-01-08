@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
     Button multiPlayer;
     Button options;
     Button stats;
+    Button exit;
     SharedPreferences sharedpreferences;
 
     @Override
@@ -67,6 +68,15 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), StatsActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        exit = (Button) findViewById(R.id.button5);
+        exit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+                System.exit(0);
             }
         });
     }

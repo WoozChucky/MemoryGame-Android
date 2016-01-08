@@ -9,8 +9,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:weightSum="3"
-    tools:context="pt.nunolevezinho.isec.jogodamemoria.GameScreens.MultiplayerTypeActivity">
+    android:weightSum="4"
+    tools:context="pt.nunolevezinho.isec.jogodamemoria.GameScreens.StatsActivity">
 
     <TextView
         android:id="@+id/selectLevelText"
@@ -18,12 +18,50 @@
         android:layout_height="fill_parent"
         android:layout_gravity="center"
         android:layout_marginTop="40dp"
-        android:layout_weight="2.2"
+        android:layout_weight="1.5"
         android:background="@drawable/title_portrait"
         android:clickable="false"
         android:gravity="center"
         android:text="@string/stats"
         android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1.9"
+        android:orientation="horizontal"
+        android:weightSum="3">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:text="@string/username"
+            android:textSize="15dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:text="@string/score"
+            android:textSize="15dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:text="@string/date"
+            android:textSize="15dp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
     <ListView
         android:id="@+id/listView"

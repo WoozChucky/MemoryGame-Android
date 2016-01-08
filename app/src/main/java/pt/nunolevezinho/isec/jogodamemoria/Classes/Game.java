@@ -320,6 +320,11 @@ public class Game implements Serializable {
 
                 if (type == GameType.SINGLEPLAYER) {
                     if (score == (getDeck().getNumCards() / 2) - getDeck().getIntruders()) {
+
+                        StatsManager.saveNewResult(parentActivity.getApplicationContext(),
+                                parentActivity.getSharedPreferences("MemoryGamePrefs", Context.MODE_PRIVATE).getString("username", "Username Not Found"),
+                                score);
+
                         EndGameDialog gDialog = new EndGameDialog(type, parentActivity, wrong,
                                 parentActivity.getSharedPreferences("MemoryGamePrefs", Context.MODE_PRIVATE).getString("username", "Username Not Found"), intruders);
                         gDialog.show();
@@ -331,12 +336,19 @@ public class Game implements Serializable {
 
                         EndGameDialog gDialog;
 
-                        if (p1Score > p2Score)
+                        if (p1Score > p2Score) {
                             gDialog = new EndGameDialog(type, parentActivity, 0, p1Name.getText().toString(), 0);
-                        else if (p2Score > p1Score)
+                            StatsManager.saveNewResult(parentActivity.getApplicationContext(),
+                                    p1Name.getText().toString(),
+                                    score);
+                        } else if (p2Score > p1Score) {
                             gDialog = new EndGameDialog(type, parentActivity, 0, p2Name.getText().toString(), 0);
-                        else
+                            StatsManager.saveNewResult(parentActivity.getApplicationContext(),
+                                    p2Name.getText().toString(),
+                                    score);
+                        } else {
                             gDialog = new EndGameDialog(type, parentActivity, 0, null, 0);
+                        }
 
                         gDialog.show();
                     }

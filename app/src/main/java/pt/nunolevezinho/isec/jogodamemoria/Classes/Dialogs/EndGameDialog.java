@@ -66,6 +66,15 @@ public class EndGameDialog extends Dialog implements android.view.View.OnClickLi
 
                 text.setText(msgText);
                 break;
+
+            case MULTIPLAYER_INTERNET:
+                if (username != null)
+                    msgText = String.format(res.getString(R.string.victory_mp), username);
+                else
+                    msgText = res.getString(R.string.match_draw);
+
+                text.setText(msgText);
+                break;
         }
 
 

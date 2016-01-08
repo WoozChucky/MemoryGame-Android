@@ -5,10 +5,11 @@ import android.content.Context;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by nunol on 1/8/2016.
@@ -18,7 +19,7 @@ public class StatsManager {
     private static String STATS_FILE = "stats.txt";
 
     public static void saveNewResult(Context context, String username, int score) {
-        File file = new File(context.getFilesDir(), STATS_FILE);
+        File file = new File(context.getFilesDir().getPath(), STATS_FILE);
         OutputStreamWriter outStreamWriter = null;
         FileOutputStream outStream = null;
         try {
@@ -29,8 +30,13 @@ public class StatsManager {
             outStream = new FileOutputStream(file, true);
             outStreamWriter = new OutputStreamWriter(outStream);
 
-            outStreamWriter.append(username + " - " + score + "\n");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String currentDateandTime = sdf.format(new Date());
+
+            outStreamWriter.append(username + " - " + score + " - " + currentDateandTime + "\n");
             outStreamWriter.flush();
+
+            //Toast.makeText(context, username + " - " + score + " - " + currentDateandTime + "\n", Toast.LENGTH_SHORT).show();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -38,14 +44,32 @@ public class StatsManager {
 
     }
 
-    public static String convertStreamToString(InputStream is) throws Exception {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-        StringBuilder sb = new StringBuilder();
+    public static String[] getStats(Context context) throws Exception {
+
+        BufferedReader reader = new BufferedReader(new FileReader(context.getFilesDir().getPath() + "/" + STATS_FILE));
+
+        String[] values;
+
         String line = null;
+
+        int i = 0;
+
         while ((line = reader.readLine()) != null) {
-            sb.append(line).append("\n");
+            i++;
         }
         reader.close();
-        return sb.toString();
+
+        values = new String[i];
+
+        i = 0;
+
+        reader = new BufferedReader(new FileReader(context.getFilesDir().getPath() + "/" + STATS_FILE));
+
+        while ((line = reader.readLine()) != null) {
+            values[i] = line;
+            i++;
+        }
+
+        return values;
     }
 }

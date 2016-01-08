@@ -37,6 +37,7 @@ import pt.nunolevezinho.isec.jogodamemoria.Adapters.CardAdapter;
 import pt.nunolevezinho.isec.jogodamemoria.Classes.Dialogs.EndGameDialog;
 import pt.nunolevezinho.isec.jogodamemoria.Classes.GameNetwork;
 import pt.nunolevezinho.isec.jogodamemoria.Classes.GameObjects.GameType;
+import pt.nunolevezinho.isec.jogodamemoria.Classes.StatsManager;
 import pt.nunolevezinho.isec.jogodamemoria.R;
 
 public class MultiplayerNetworkGame extends AppCompatActivity {
@@ -299,12 +300,19 @@ public class MultiplayerNetworkGame extends AppCompatActivity {
 
                         EndGameDialog gDialog;
 
-                        if (p1Score > p2Score)
+                        if (p1Score > p2Score) {
                             gDialog = new EndGameDialog(GameType.MULTIPLAYER_INTERNET, MultiplayerNetworkGame.this, 0, p1Name.getText().toString(), 0);
-                        else if (p2Score > p1Score)
+                            StatsManager.saveNewResult(getApplicationContext(),
+                                    p2Name.getText().toString(),
+                                    p1Score);
+                        } else if (p2Score > p1Score) {
                             gDialog = new EndGameDialog(GameType.MULTIPLAYER_INTERNET, MultiplayerNetworkGame.this, 0, p2Name.getText().toString(), 0);
-                        else
+                            StatsManager.saveNewResult(getApplicationContext(),
+                                    p2Name.getText().toString(),
+                                    p2Score);
+                        } else {
                             gDialog = new EndGameDialog(GameType.MULTIPLAYER_INTERNET, MultiplayerNetworkGame.this, 0, null, 0);
+                        }
 
                         gDialog.show();
                     }
@@ -554,17 +562,58 @@ public class MultiplayerNetworkGame extends AppCompatActivity {
             if (game.getDeck().getCard1().getCardID() == game.getDeck().getCard2().getCardID()) {
                 adapter.getCardsCompleted().add(adapter.getPositionImage1());
                 adapter.getCardsCompleted().add(adapter.getPositionImage2());
+
+                if (game.getDeck().getOtherTheme() != null) {
+                    /*
+                    If Match Cards are Intruder Cards
+                     */
+                    if (game.getDeck().getCard1().getTheme().getType() == game.getDeck().getOtherTheme().getType() && game.getDeck().getCard2().getTheme().getType() == game.getDeck().getOtherTheme().getType()) {
+                        //Intruder Found
+                        switch (game.getCurrentPlayer()) {
+                            case MultiplayerNetworkGame.ME:
+                                p1intruders++;
+                                break;
+
+                            case MultiplayerNetworkGame.OTHER:
+                                p2intruders++;
+                                break;
+                        }
+                        resetAdapterPositions();
+                        resetDeckCards();
+                    }
+                    /*
+                    If Match Cards are Main Theme Cards
+                     */
+                    else {
+                        switch (game.getCurrentPlayer()) {
+                            case MultiplayerNetworkGame.ME:
+                                p1Score++;
+                                break;
+
+                            case MultiplayerNetworkGame.OTHER:
+                                p2Score++;
+                                break;
+                        }
+
+                    }
+                    resetAdapterPositions();
+                    resetDeckCards();
+
+                } else {
+                    switch (game.getCurrentPlayer()) {
+                        case MultiplayerNetworkGame.ME:
+                            p1Score++;
+                            break;
+                        case MultiplayerNetworkGame.OTHER:
+                            p2Score++;
+                            break;
+                    }
+                }
+
                 resetAdapterPositions();
                 resetDeckCards();
 
-                switch (game.getCurrentPlayer()) {
-                    case MultiplayerNetworkGame.ME:
-                        p1Score++;
-                        break;
-                    case MultiplayerNetworkGame.OTHER:
-                        p2Score++;
-                        break;
-                }
+
             } else {
                 //Incrementa Erros do Jogador
                 switch (game.getCurrentPlayer()) {
@@ -601,12 +650,19 @@ public class MultiplayerNetworkGame extends AppCompatActivity {
 
                 EndGameDialog gDialog;
 
-                if (p1Score > p2Score)
+                if (p1Score > p2Score) {
                     gDialog = new EndGameDialog(GameType.MULTIPLAYER_INTERNET, MultiplayerNetworkGame.this, 0, p1Name.getText().toString(), 0);
-                else if (p2Score > p1Score)
+                    StatsManager.saveNewResult(getApplicationContext(),
+                            p2Name.getText().toString(),
+                            p1Score);
+                } else if (p2Score > p1Score) {
                     gDialog = new EndGameDialog(GameType.MULTIPLAYER_INTERNET, MultiplayerNetworkGame.this, 0, p2Name.getText().toString(), 0);
-                else
+                    StatsManager.saveNewResult(getApplicationContext(),
+                            p2Name.getText().toString(),
+                            p2Score);
+                } else {
                     gDialog = new EndGameDialog(GameType.MULTIPLAYER_INTERNET, MultiplayerNetworkGame.this, 0, null, 0);
+                }
 
                 gDialog.show();
             }

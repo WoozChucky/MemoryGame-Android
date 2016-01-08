@@ -36,4 +36,6 @@
     <string name="need_ip">Introduz endereço IP do outro jogador.</string>
     <string name="edit">Editar</string>
     <string name="username">Nome de Utilizador</string>
+    <string name="score">Pontuação</string>
+    <string name="date">Data</string>
 </resources>
