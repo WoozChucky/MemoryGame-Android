@@ -4,10 +4,12 @@ import android.content.Context;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -42,6 +44,17 @@ public class StatsManager {
             e.printStackTrace();
         }
 
+    }
+
+    public static void clear(Context context) {
+        PrintWriter writer = null;
+        try {
+            writer = new PrintWriter(new File(context.getFilesDir().getPath() + "/" + STATS_FILE));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        writer.print("");
+        writer.close();
     }
 
     public static String[] getStats(Context context) throws Exception {

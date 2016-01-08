@@ -88,11 +88,10 @@ public class MultiplayerNetworkGame extends AppCompatActivity {
                     String read = input.readLine();
                     final int move = Integer.parseInt(read);
 
-                    Log.e("MemoryGame", "Received: " + move);
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(getApplicationContext(), "Received " + move, Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(getApplicationContext(), "Received " + move, Toast.LENGTH_SHORT).show();
                             moveOtherPlayer(move);
                         }
                     });
@@ -420,7 +419,6 @@ public class MultiplayerNetworkGame extends AppCompatActivity {
             @Override
             public void run() {
                 try {
-                    Log.e("RPS", "Connecting to the server  " + strIP);
                     socketGame = new Socket(strIP, Port);
                 } catch (Exception e) {
                     socketGame = null;
@@ -448,8 +446,6 @@ public class MultiplayerNetworkGame extends AppCompatActivity {
             if (inputObjects == null)
                 inputObjects = new ObjectInputStream(socketGame.getInputStream());
 
-            Log.e("MemoryGame", "Sending game info: " + currentGame);
-
             outputObjects.writeObject(currentGame);
             outputObjects.flush();
 
@@ -457,8 +453,6 @@ public class MultiplayerNetworkGame extends AppCompatActivity {
 
             outputObjects.writeObject(p1Name.getText());
             outputObjects.flush();
-
-            Log.d("MemoryGame", "Received name: " + p2tempName);
 
             handler.post(new Runnable() {
                 @Override
@@ -468,8 +462,7 @@ public class MultiplayerNetworkGame extends AppCompatActivity {
             });
 
         } catch (Exception e) {
-            Log.e("MemoryGame", "Error sending game info");
-            Log.e("MemoryGame", "Exception:" + e);
+            Log.e("Game", e.toString());
         }
     }
 
@@ -481,8 +474,6 @@ public class MultiplayerNetworkGame extends AppCompatActivity {
                 outputObjects = new ObjectOutputStream(socketGame.getOutputStream());
 
             final GameNetwork currentGame = (GameNetwork) inputObjects.readObject();
-
-            Log.e("MemoryGame", "Received: " + currentGame);
 
             outputObjects.writeObject(p1Name.getText());
 
@@ -497,7 +488,7 @@ public class MultiplayerNetworkGame extends AppCompatActivity {
             });
 
         } catch (Exception e) {
-            Log.e("MemoryGame", "Exception:" + e);
+            Log.e("Game", e.toString());
             handler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -523,7 +514,7 @@ public class MultiplayerNetworkGame extends AppCompatActivity {
             if (inputObjects != null)
                 inputObjects.close();
         } catch (Exception e) {
-            Log.e("MemoryGame", e.toString());
+            Log.e("Game", e.toString());
         }
         input = null;
         output = null;
@@ -537,11 +528,11 @@ public class MultiplayerNetworkGame extends AppCompatActivity {
             @Override
             public void run() {
                 try {
-                    Log.e("MemoryGame", "Sending a move: " + move);
+                    Log.e("Game", "Sending a move: " + move);
                     output.println(move);
                     output.flush();
                 } catch (Exception e) {
-                    Log.e("MemoryGame", "Error sending a move");
+                    Log.e("Game", "Error sending a move");
                 }
             }
         });

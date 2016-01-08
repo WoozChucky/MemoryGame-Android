@@ -38,4 +38,7 @@
     <string name="username">Username</string>
     <string name="score">Score</string>
     <string name="date">Date</string>
+    <string name="clear_stats">Clear Stats</string>
+    <string name="credits">Credits</string>
+    <string name="credits_text">Developed by:\n\nDaniel Ferreira nº21220170\nNuno Silva nº21220170\n\n@ISEC 2016</string>
 </resources>
