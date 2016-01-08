@@ -1,7 +1,5 @@
 package pt.nunolevezinho.isec.jogodamemoria.Classes;
 
-import android.content.Context;
-
 import java.io.Serializable;
 
 import pt.nunolevezinho.isec.jogodamemoria.Classes.GameObjects.Deck;
@@ -13,16 +11,14 @@ import pt.nunolevezinho.isec.jogodamemoria.GameScreens.MultiplayerNetworkGame;
  */
 public class GameNetwork implements Serializable {
 
-    public String name = "Kel Game";
-
     private int currentPlayer;
     private int level;
-    private Context myContent;
     private Deck deck;
 
     public GameNetwork(int level) {
         switch (level) {
             case 1:
+
                 setDeck(new Deck(4, new Theme(Theme.ThemeType.FOOD)));
                 break;
             case 2:
@@ -47,6 +43,7 @@ public class GameNetwork implements Serializable {
                 setDeck(new Deck(30, 3, new Theme(Theme.ThemeType.FOOD), new Theme(Theme.ThemeType.ICON)));
                 break;
         }
+        deck.generateDeck();
         this.level = level;
 
     }
@@ -66,14 +63,6 @@ public class GameNetwork implements Serializable {
         currentPlayer = player;
     }
 
-    public Context getMyContent() {
-        return myContent;
-    }
-
-    public void setMyContent(Context myContent) {
-        this.myContent = myContent;
-    }
-
     public Deck getDeck() {
         return deck;
     }
@@ -86,7 +75,4 @@ public class GameNetwork implements Serializable {
         return level;
     }
 
-    public void setLevel(int level) {
-        this.level = level;
-    }
 }

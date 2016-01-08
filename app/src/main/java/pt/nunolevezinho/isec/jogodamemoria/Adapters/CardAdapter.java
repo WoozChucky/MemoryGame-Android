@@ -13,8 +13,11 @@ import android.widget.ImageView;
 import java.util.ArrayList;
 import java.util.List;
 
+import pt.nunolevezinho.isec.jogodamemoria.Classes.GameNetwork;
 import pt.nunolevezinho.isec.jogodamemoria.Classes.GameObjects.Card;
 import pt.nunolevezinho.isec.jogodamemoria.Classes.GameObjects.Deck;
+import pt.nunolevezinho.isec.jogodamemoria.Classes.GameObjects.GameType;
+import pt.nunolevezinho.isec.jogodamemoria.GameScreens.MultiplayerNetworkGame;
 import pt.nunolevezinho.isec.jogodamemoria.R;
 
 /**
@@ -25,10 +28,14 @@ public class CardAdapter extends BaseAdapter {
     private Context mContext;
     private Deck deck;
     private Integer positionImage1, positionImage2;
+    private GameType type;
+    private GameNetwork game;
 
-    public CardAdapter(Context c, Deck deck) {
-        mContext = c;
+    public CardAdapter(Context c, Deck deck, GameType type, GameNetwork game) {
+        this.mContext = c;
         this.deck = deck;
+        this.type = type;
+        this.game = game;
     }
 
     public static int calculateInSampleSize(BitmapFactory.Options options,
@@ -101,11 +108,9 @@ public class CardAdapter extends BaseAdapter {
         positionImage2 = position;
     }
 
-    // create a new ImageView for each item referenced by the Adapter
     public View getView(int position, View convertView, ViewGroup parent) {
         ImageView imageView;
-        if (convertView == null) { // if it's not recycled, initialize some
-            // attributes
+        if (convertView == null) {
             imageView = new ImageView(mContext);
             imageView.setLayoutParams(new GridView.LayoutParams(90, 100));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -166,6 +171,11 @@ public class CardAdapter extends BaseAdapter {
         if (getCardsCompleted().contains(position)) {
             enabled = false;
         }
+
+        if(type != null)
+            if(type == GameType.MULTIPLAYER_INTERNET)
+                if (game.getCurrentPlayer() != MultiplayerNetworkGame.ME)
+                    enabled = false;
 
         return enabled;
     }

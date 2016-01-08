@@ -60,6 +60,21 @@ public class MultiplayerNetworkGame extends AppCompatActivity {
     GameNetwork game;
     CardAdapter adapter;
     GridView gameGrid;
+    /* MultiPlayer Local Variables */
+    private int p1Score = 0;
+    private int p2Score = 0;
+    private int p1wrong = 0;
+    private int p2wrong = 0;
+    private int p1intruders = 0;
+    private int p2intruders = 0;
+    private TextView p1Name;
+    private TextView p1scoreTV;
+    private TextView p1wrongTV;
+    private TextView p1intrudersTV;
+    private TextView p2Name;
+    private TextView p2scoreTV;
+    private TextView p2wrongTV;
+    private TextView p2intrudersTV;
     Thread commThread = new Thread(new Runnable() {
         @Override
         public void run() {
@@ -93,21 +108,6 @@ public class MultiplayerNetworkGame extends AppCompatActivity {
             }
         }
     });
-    /* MultiPlayer Local Variables */
-    private int p1Score = 0;
-    private int p2Score = 0;
-    private int p1wrong = 0;
-    private int p2wrong = 0;
-    private int p1intruders = 0;
-    private int p2intruders = 0;
-    private TextView p1Name;
-    private TextView p1scoreTV;
-    private TextView p1wrongTV;
-    private TextView p1intrudersTV;
-    private TextView p2Name;
-    private TextView p2scoreTV;
-    private TextView p2wrongTV;
-    private TextView p2intrudersTV;
 
     private static String getLocalIpAddress() {
         try {
@@ -139,6 +139,25 @@ public class MultiplayerNetworkGame extends AppCompatActivity {
             return;
         }
 
+        p1Name = (TextView) findViewById(R.id.p1Name);
+        p1scoreTV = (TextView) findViewById(R.id.scorep1);
+        p1wrongTV = (TextView) findViewById(R.id.wrongp1);
+        p1intrudersTV = (TextView) findViewById(R.id.intrudersp1);
+
+        p2Name = (TextView) findViewById(R.id.p2Name);
+        p2scoreTV = (TextView) findViewById(R.id.scorep2);
+        p2wrongTV = (TextView) findViewById(R.id.wrongp2);
+        p2intrudersTV = (TextView) findViewById(R.id.intrudersp2);
+
+        p1scoreTV.setText(String.format(getResources().getString(R.string.score_disp), p1Score));
+        p2scoreTV.setText(String.format(getResources().getString(R.string.score_disp), p2Score));
+
+        p1wrongTV.setText(String.format(getResources().getString(R.string.wrong_disp), p1wrong));
+        p2wrongTV.setText(String.format(getResources().getString(R.string.wrong_disp), p2wrong));
+
+        p1intrudersTV.setText(String.format(getResources().getString(R.string.intruders_disp), p1intruders));
+        p2intrudersTV.setText(String.format(getResources().getString(R.string.intruders_disp), p2intruders));
+
         Intent intent = getIntent();
         if (intent != null) {
             mode = intent.getIntExtra("mode", SERVER);
@@ -161,18 +180,17 @@ public class MultiplayerNetworkGame extends AppCompatActivity {
         if (gameReceived != null) {
             game = gameReceived;
             game.setCurrentPlayer(OTHER);
-            game.setMyContent(getApplicationContext());
-            p2Name.setText("lol");
         } else {
             game = new GameNetwork(level);
         }
 
+
         gameGrid = (GridView) findViewById(R.id.gameGridMPLoc);
-        adapter = new CardAdapter(getApplicationContext(), game.getDeck());
+        adapter = new CardAdapter(getApplicationContext(), game.getDeck(), GameType.MULTIPLAYER_INTERNET, game);
         gameGrid.setAdapter(adapter);
 
-
         gameGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
             public void onItemClick(AdapterView<?> parent, View v, final int position, long id) {
 
                 ImageView imageView = (ImageView) v;
@@ -185,6 +203,7 @@ public class MultiplayerNetworkGame extends AppCompatActivity {
 
                     moveMyPlayer(position);
                 } else if (game.getDeck().getCard1() != null && game.getDeck().getCard2() == null) {
+
                     adapter.setPositionImage2(position);
                     imageView.setImageBitmap(CardAdapter.decodeSampledBitmapFromResource(getResources(), adapter.getItem(position).getCardFront(), 50, 50));
                     game.getDeck().setCard2(adapter.getItem(position));
@@ -194,17 +213,56 @@ public class MultiplayerNetworkGame extends AppCompatActivity {
                     if (game.getDeck().getCard1().getCardID() == game.getDeck().getCard2().getCardID()) {
                         adapter.getCardsCompleted().add(adapter.getPositionImage1());
                         adapter.getCardsCompleted().add(adapter.getPositionImage2());
+
+                        if (game.getDeck().getOtherTheme() != null) {
+                                /*
+                                If Match Cards are Intruder Cards
+                                 */
+                            if (game.getDeck().getCard1().getTheme().getType() == game.getDeck().getOtherTheme().getType() && game.getDeck().getCard2().getTheme().getType() == game.getDeck().getOtherTheme().getType()) {
+                                //Intruder Found
+                                switch (game.getCurrentPlayer()) {
+                                    case MultiplayerNetworkGame.ME:
+                                        p1intruders++;
+                                        break;
+
+                                    case MultiplayerNetworkGame.OTHER:
+                                        p2intruders++;
+                                        break;
+                                }
+                            }
+                                /*
+                                If Match Cards are Main Theme Cards
+                                 */
+                            else {
+                                switch (game.getCurrentPlayer()) {
+                                    case MultiplayerNetworkGame.ME:
+                                        p1Score++;
+                                        break;
+
+                                    case MultiplayerNetworkGame.OTHER:
+                                        p2Score++;
+                                        break;
+                                }
+
+                            }
+                            resetAdapterPositions();
+                            resetDeckCards();
+
+                        } else {
+                            switch (game.getCurrentPlayer()) {
+                                case MultiplayerNetworkGame.ME:
+                                    p1Score++;
+                                    break;
+                                case MultiplayerNetworkGame.OTHER:
+                                    p2Score++;
+                                    break;
+                            }
+                        }
+
                         resetAdapterPositions();
                         resetDeckCards();
 
-                        switch (game.getCurrentPlayer()) {
-                            case MultiplayerNetworkGame.ME:
-                                p1Score++;
-                                break;
-                            case MultiplayerNetworkGame.OTHER:
-                                p2Score++;
-                                break;
-                        }
+
                     } else {
                         //Incrementa Erros do Jogador
                         switch (game.getCurrentPlayer()) {
@@ -227,17 +285,26 @@ public class MultiplayerNetworkGame extends AppCompatActivity {
                         }
                     }, 1500);
 
+                    p1scoreTV.setText(String.format(getResources().getString(R.string.score_disp), p1Score));
+                    p2scoreTV.setText(String.format(getResources().getString(R.string.score_disp), p2Score));
+
+                    p1wrongTV.setText(String.format(getResources().getString(R.string.wrong_disp), p1wrong));
+                    p2wrongTV.setText(String.format(getResources().getString(R.string.wrong_disp), p2wrong));
+
+                    p1intrudersTV.setText(String.format(getResources().getString(R.string.intruders_disp), p1intruders));
+                    p2intrudersTV.setText(String.format(getResources().getString(R.string.intruders_disp), p2intruders));
+
                     //Check for Game End
                     if (p1Score + p2Score == (game.getDeck().getNumCards() / 2) - game.getDeck().getIntruders()) {
 
                         EndGameDialog gDialog;
 
                         if (p1Score > p2Score)
-                            gDialog = new EndGameDialog(GameType.MULTIPLAYER_INTERNET, getParent(), 0, p1Name.getText().toString(), 0);
+                            gDialog = new EndGameDialog(GameType.MULTIPLAYER_INTERNET, MultiplayerNetworkGame.this, 0, p1Name.getText().toString(), 0);
                         else if (p2Score > p1Score)
-                            gDialog = new EndGameDialog(GameType.MULTIPLAYER_INTERNET, getParent(), 0, p2Name.getText().toString(), 0);
+                            gDialog = new EndGameDialog(GameType.MULTIPLAYER_INTERNET, MultiplayerNetworkGame.this, 0, p2Name.getText().toString(), 0);
                         else
-                            gDialog = new EndGameDialog(GameType.MULTIPLAYER_INTERNET, getParent(), 0, null, 0);
+                            gDialog = new EndGameDialog(GameType.MULTIPLAYER_INTERNET, MultiplayerNetworkGame.this, 0, null, 0);
 
                         gDialog.show();
                     }
@@ -380,6 +447,9 @@ public class MultiplayerNetworkGame extends AppCompatActivity {
 
             final String p2tempName = (String) inputObjects.readObject();
 
+            outputObjects.writeObject(p1Name.getText());
+            outputObjects.flush();
+
             Log.d("MemoryGame", "Received name: " + p2tempName);
 
             handler.post(new Runnable() {
@@ -408,11 +478,13 @@ public class MultiplayerNetworkGame extends AppCompatActivity {
 
             outputObjects.writeObject(p1Name.getText());
 
+            final String p2TempName = (String) inputObjects.readObject();
+
             handler.post(new Runnable() {
                 @Override
                 public void run() {
                     startGame(currentGame);
-                    p2Name.setText(p1Name.getText());
+                    p2Name.setText(p2TempName);
                 }
             });
 
@@ -468,8 +540,77 @@ public class MultiplayerNetworkGame extends AppCompatActivity {
         t.start();
     }
 
-    void moveOtherPlayer(int move) {
+    void moveOtherPlayer(int position) {
+        if (game.getDeck().getCard1() == null && game.getDeck().getCard2() == null) {
+            adapter.setPositionImage1(position);
+            game.getDeck().setCard1(adapter.getItem(position));
+            gameGrid.invalidateViews();
 
+        } else if (game.getDeck().getCard1() != null && game.getDeck().getCard2() == null) {
+            adapter.setPositionImage2(position);
+            game.getDeck().setCard2(adapter.getItem(position));
+            gameGrid.invalidateViews();
+
+            if (game.getDeck().getCard1().getCardID() == game.getDeck().getCard2().getCardID()) {
+                adapter.getCardsCompleted().add(adapter.getPositionImage1());
+                adapter.getCardsCompleted().add(adapter.getPositionImage2());
+                resetAdapterPositions();
+                resetDeckCards();
+
+                switch (game.getCurrentPlayer()) {
+                    case MultiplayerNetworkGame.ME:
+                        p1Score++;
+                        break;
+                    case MultiplayerNetworkGame.OTHER:
+                        p2Score++;
+                        break;
+                }
+            } else {
+                //Incrementa Erros do Jogador
+                switch (game.getCurrentPlayer()) {
+                    case MultiplayerNetworkGame.ME:
+                        p1wrong++;
+                        break;
+                    case MultiplayerNetworkGame.OTHER:
+                        p2wrong++;
+                        break;
+                }
+                game.setCurrentPlayer(game.getNextPlayer());
+            }
+
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    resetAdapterPositions();
+                    resetDeckCards();
+                    gameGrid.invalidateViews();
+                }
+            }, 800);
+
+            p1scoreTV.setText(String.format(getResources().getString(R.string.score_disp), p1Score));
+            p2scoreTV.setText(String.format(getResources().getString(R.string.score_disp), p2Score));
+
+            p1wrongTV.setText(String.format(getResources().getString(R.string.wrong_disp), p1wrong));
+            p2wrongTV.setText(String.format(getResources().getString(R.string.wrong_disp), p2wrong));
+
+            p1intrudersTV.setText(String.format(getResources().getString(R.string.intruders_disp), p1intruders));
+            p2intrudersTV.setText(String.format(getResources().getString(R.string.intruders_disp), p2intruders));
+
+            //Check for Game End
+            if (p1Score + p2Score == (game.getDeck().getNumCards() / 2) - game.getDeck().getIntruders()) {
+
+                EndGameDialog gDialog;
+
+                if (p1Score > p2Score)
+                    gDialog = new EndGameDialog(GameType.MULTIPLAYER_INTERNET, MultiplayerNetworkGame.this, 0, p1Name.getText().toString(), 0);
+                else if (p2Score > p1Score)
+                    gDialog = new EndGameDialog(GameType.MULTIPLAYER_INTERNET, MultiplayerNetworkGame.this, 0, p2Name.getText().toString(), 0);
+                else
+                    gDialog = new EndGameDialog(GameType.MULTIPLAYER_INTERNET, MultiplayerNetworkGame.this, 0, null, 0);
+
+                gDialog.show();
+            }
+        }
     }
 
     private void resetDeckCards() {

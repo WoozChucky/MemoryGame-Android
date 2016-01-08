@@ -34,4 +34,6 @@
     <string name="join">Join Game</string>
     <string name="waiting_player">Waiting for player...</string>
     <string name="need_ip">Insert other player IP Address</string>
+    <string name="edit">Edit</string>
+    <string name="username">Username</string>
 </resources>

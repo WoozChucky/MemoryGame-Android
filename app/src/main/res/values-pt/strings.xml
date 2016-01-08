@@ -34,4 +34,6 @@
     <string name="join">Juntar a Jogo</string>
     <string name="waiting_player">À espera de um jogador...</string>
     <string name="need_ip">Introduz endereço IP do outro jogador.</string>
+    <string name="edit">Editar</string>
+    <string name="username">Nome de Utilizador</string>
 </resources>

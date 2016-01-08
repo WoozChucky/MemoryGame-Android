@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:weightSum="3"
+    tools:context="pt.nunolevezinho.isec.jogodamemoria.GameScreens.MultiplayerTypeActivity">
+
+    <TextView
+        android:id="@+id/selectLevelText"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:layout_gravity="center"
+        android:layout_marginTop="80dp"
+        android:layout_weight="1.05"
+        android:background="@drawable/title_portrait"
+        android:clickable="false"
+        android:gravity="center"
+        android:text="@string/options"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginTop="15dp"
+        android:layout_weight="1.3"
+        android:paddingLeft="10dp">
+
+        <TextView
+            android:id="@+id/changeUsername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:text="@string/username"
+            android:textSize="25dp"
+            android:textStyle="bold" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="0.8"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+
+        <EditText
+            android:id="@+id/userInput"
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="0.7"
+            android:background="@drawable/input_bg"
+            android:hint="@string/insertUsername"
+            android:inputType="textNoSuggestions|textPersonName"
+            android:lines="1"
+            android:paddingLeft="20dp" />
+
+        <Button
+            android:id="@+id/networkBtn"
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:layout_weight="1.4"
+            android:background="@drawable/yellowbutton"
+            android:onClick="changeUsername"
+            android:text="@string/edit" />
+    </LinearLayout>
+
+
+</LinearLayout>

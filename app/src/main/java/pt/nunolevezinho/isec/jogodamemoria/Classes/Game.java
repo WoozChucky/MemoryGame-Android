@@ -133,7 +133,7 @@ public class Game implements Serializable {
 
         this.getDeck().generateDeck();
 
-        setCardAdapter(new CardAdapter(this.activityContext, this.getDeck()));
+        setCardAdapter(new CardAdapter(this.activityContext, this.getDeck(), null, null));
 
         this.gameGrid.setAdapter(getCardAdapter());
 
