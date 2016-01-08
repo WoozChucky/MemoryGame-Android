@@ -1,11 +1,13 @@
 package pt.nunolevezinho.isec.jogodamemoria.Classes.GameObjects;
 
+import java.io.Serializable;
+
 import pt.nunolevezinho.isec.jogodamemoria.R;
 
 /**
  * Created by nunol on 1/5/2016.
  */
-public class Card {
+public class Card implements Serializable {
     private int cardID;
     private int cardFront;
     private int cardBack = R.drawable.card_back;

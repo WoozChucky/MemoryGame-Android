@@ -2,7 +2,6 @@ package pt.nunolevezinho.isec.jogodamemoria.Classes;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
@@ -57,15 +56,12 @@ public class Game implements Serializable {
     private int wrong = 0;
     private int intruders = 0;
 
-    private int level;
-
     private Deck deck;
     private CardAdapter adapter;
 
     public Game(final Context context, int level, final GameType type, final GridView gameGrid, final Activity parentActivity) {
         this.parentActivity = parentActivity;
         this.activityContext = context;
-        this.setLevel(level);
         this.type = type;
         this.gameGrid = gameGrid;
 
@@ -149,39 +145,50 @@ public class Game implements Serializable {
 
                 ImageView imageView = (ImageView) view; //Image Clicked
 
-                if (getDeck().getCard1() == null && getDeck().getCard2() == null) //Turn over first card
-                {
+                /*
+                No Card Was Played, Turn Over First Card
+                 */
+                if (getDeck().getCard1() == null && getDeck().getCard2() == null) {
                     getCardAdapter().setPositionImage1(position);
                     imageView.setImageBitmap(CardAdapter.decodeSampledBitmapFromResource(activityContext.getResources(), getCardAdapter().getItem(position).getCardFront(), 50, 50));
                     getDeck().setCard1(getCardAdapter().getItem(position));
-
-                    if (type == GameType.MULTIPLAYER_INTERNET) {
-                        ((MultiplayerNetworkGame) parentActivity).moveMyPlayer(position);
-                    }
-
-                } else if (getDeck().getCard1() != null && getDeck().getCard2() == null) //Turn Over second card
+                }
+                /*
+                First Card Was Found, Turn Over Second Card
+                 */
+                else if (getDeck().getCard1() != null && getDeck().getCard2() == null) //Turn Over second card
                 {
+                    /*
+                    Turn Card, Update Adatper and Grid
+                     */
                     getCardAdapter().setPositionImage2(position);
                     imageView.setImageBitmap(CardAdapter.decodeSampledBitmapFromResource(activityContext.getResources(), getCardAdapter().getItem(position).getCardFront(), 50, 50));
+                    getDeck().setCard2(getCardAdapter().getItem(position));
                     getCardAdapter().notifyDataSetChanged();
                     gameGrid.invalidateViews();
-                    getDeck().setCard2(getCardAdapter().getItem(position));
 
-                    if (type == GameType.MULTIPLAYER_INTERNET) {
-                        ((MultiplayerNetworkGame) parentActivity).moveMyPlayer(position);
-                    }
-
+                    /*
+                    If Both Cards Are a Match, Then Proceed To Handle Type Of Game & Cards
+                     */
                     if (getDeck().getCard1().getCardID() == getDeck().getCard2().getCardID()) {
+
+                        /*
+                        Add Cards to "CompletedArray" and Remove The Option To Turn Them Again
+                         */
                         getCardAdapter().getCardsCompleted().add(getCardAdapter().getPositionImage1());
                         getCardAdapter().getCardsCompleted().add(getCardAdapter().getPositionImage2());
-                        getDeck().setCard1(null);
-                        getDeck().setCard2(null);
-                        getCardAdapter().setPositionImage1(null);
-                        getCardAdapter().setPositionImage2(null);
 
-                        //Increment Stats and Keep Playing
-                        if (type == GameType.MULTIPLAYER_LOCAL || type == GameType.MULTIPLAYER_INTERNET) {
-                            if (getDeck().getOtherTheme() != null) { //Game With Intruders
+                        /*
+                        For MultiPlayer On Same Device
+                         */
+                        if (type == GameType.MULTIPLAYER_LOCAL) {
+                            /*
+                            If Game Has Intruders
+                             */
+                            if (getDeck().getOtherTheme() != null) {
+                                /*
+                                If Match Cards are Intruder Cards
+                                 */
                                 if (getDeck().getCard1().getTheme().getType() == getDeck().getOtherTheme().getType() && getDeck().getCard2().getTheme().getType() == getDeck().getOtherTheme().getType()) {
                                     //Intruder Found
                                     switch (currentlyPlaying) {
@@ -195,7 +202,11 @@ public class Game implements Serializable {
                                             p2intruders++;
                                             break;
                                     }
-                                } else {
+                                }
+                                /*
+                                If Match Cards are Main Theme Cards
+                                 */
+                                else {
                                     switch (currentlyPlaying) {
                                         case MultiplayerNetworkGame.ME:
                                         case 1000: //Player1
@@ -208,12 +219,13 @@ public class Game implements Serializable {
                                             break;
                                     }
                                 }
-                                //p1intrudersTV.setText("Intruders: " + p1intruders);
-                                //p2intrudersTV.setText("Intruders: " + p2intruders);
-                                //p1scoreTV.setText("Score: " + p1Score);
-                                //p2scoreTV.setText("Score: " + p2Score);
-                            } else //Game Without Intruders
-                            {
+                                resetAdapterPositions();
+                                resetDeckCards();
+                            }
+                            /*
+                            Game Without Intruders
+                             */
+                            else {
                                 switch (currentlyPlaying) {
                                     case MultiplayerNetworkGame.ME:
                                     case 1000: //Player1
@@ -225,15 +237,22 @@ public class Game implements Serializable {
                                         p2Score++;
                                         break;
                                 }
-                                //p1scoreTV.setText("Score: " + p1Score);
-                                //p2scoreTV.setText("Score: " + p2Score);
+                                resetAdapterPositions();
+                                resetDeckCards();
                             }
                         }
-                        if (type == GameType.SINGLEPLAYER) {
-                            //Log.e("Card 1 Theme ", deck.getCard1().getTheme().getType().toString());
-                            //Log.e("OtherTheme ", deck.getOtherTheme().getType().toString());
 
-                            if (getDeck().getOtherTheme() != null) { //Game With Intruders
+                        /*
+                        If Game Type Is Singleplayer
+                         */
+                        if (type == GameType.SINGLEPLAYER) {
+                            /*
+                            If Game Has Intruders
+                             */
+                            if (getDeck().getOtherTheme() != null) {
+                                /*
+                                If Match Cards are Intruder Cards
+                                 */
                                 if (getDeck().getCard1().getTheme().getType() == getDeck().getOtherTheme().getType() && getDeck().getCard2().getTheme().getType() == getDeck().getOtherTheme().getType()) {
                                     //Intruder Found
                                     intruders++;
@@ -242,67 +261,73 @@ public class Game implements Serializable {
                                     score++;
                                     Log.e("Score:", score + "");
                                 }
-                            } else //Game Without Intruders
-                            {
-                                //Normal Match Found
+                                resetAdapterPositions();
+                                resetDeckCards();
+                            }
+                             /*
+                            Game Without Intruders
+                             */
+                            else {
                                 score++;
                                 Log.e("Score:", score + "");
+                                resetAdapterPositions();
+                                resetDeckCards();
                             }
                         }
 
 
                     } else {
+                    /*
+                    Both Cards Are Not a Match. Handle Score And Player Stuff
+                    */
 
-                        if (type == GameType.SINGLEPLAYER) {
+                        if (type == GameType.SINGLEPLAYER)
                             wrong++;
-                        }
 
-                        //Increment Stats, Change Player
+                        /*
+                         Increment Stats, Change Player
+                         */
                         if (type == GameType.MULTIPLAYER_LOCAL) {
                             switch (currentlyPlaying) {
-                                case MultiplayerNetworkGame.ME:
                                 case 1000: //Player1
                                     p1wrong++;
                                     currentlyPlaying = p2ID;
                                     Toast.makeText(parentActivity.getApplicationContext(), String.format(parentActivity.getResources().getString(R.string.now_playing), p2Name.getText()), Toast.LENGTH_SHORT).show();
                                     break;
 
-                                case MultiplayerNetworkGame.OTHER:
                                 case 2000: //Player2
                                     p2wrong++;
                                     currentlyPlaying = p1ID;
                                     Toast.makeText(parentActivity.getApplicationContext(), String.format(parentActivity.getResources().getString(R.string.now_playing), p1Name.getText()), Toast.LENGTH_SHORT).show();
                                     break;
                             }
-                            //p1wrongTV.setText("Wrong: " + p1wrong);
-                            //p2wrongTV.setText("Wrong: " + p2wrong);
                         }
 
-                        //imageView.setImageBitmap(CardAdapter.decodeSampledBitmapFromResource(activityContext.getResources(), R.drawable.card_back, 50, 50));
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                getDeck().setCard1(null);
-                                getDeck().setCard2(null);
-                                getCardAdapter().setPositionImage1(null);
-                                getCardAdapter().setPositionImage2(null);
+                                resetDeckCards();
+                                resetAdapterPositions();
                                 gameGrid.invalidateViews();
                             }
                         }, 750);
                     }
                 }
 
+                /*
+                Check For Game End.  SinglePlayer And MultiPlayer
+                 */
+
                 if (type == GameType.SINGLEPLAYER) {
                     if (score == (getDeck().getNumCards() / 2) - getDeck().getIntruders()) {
-
-                        SharedPreferences sharedpreferences = parentActivity.getSharedPreferences("MemoryGamePrefs", Context.MODE_PRIVATE);
-                        EndGameDialog gDialog = new EndGameDialog(type, parentActivity, wrong, sharedpreferences.getString("username", "Username Not Found"), intruders);
+                        EndGameDialog gDialog = new EndGameDialog(type, parentActivity, wrong,
+                                parentActivity.getSharedPreferences("MemoryGamePrefs", Context.MODE_PRIVATE).getString("username", "Username Not Found"), intruders);
                         gDialog.show();
                     }
-                } else if (type == GameType.MULTIPLAYER_LOCAL || type == GameType.MULTIPLAYER_INTERNET) {
-                    if (p1Score + p2Score == (getDeck().getNumCards() / 2) - getDeck().getIntruders()) {
+                }
 
-                        Log.e("Finished MP Local Game", "TRUE CARALhO");
+                if (type == GameType.MULTIPLAYER_LOCAL) {
+                    if (p1Score + p2Score == (getDeck().getNumCards() / 2) - getDeck().getIntruders()) {
 
                         EndGameDialog gDialog;
 
@@ -315,6 +340,7 @@ public class Game implements Serializable {
 
                         gDialog.show();
                     }
+
                     p1scoreTV.setText(String.format(parentActivity.getResources().getString(R.string.score_disp), p1Score));
                     p2scoreTV.setText(String.format(parentActivity.getResources().getString(R.string.score_disp), p2Score));
 
@@ -324,23 +350,22 @@ public class Game implements Serializable {
                     p1intrudersTV.setText(String.format(parentActivity.getResources().getString(R.string.intruders_disp), p1intruders));
                     p2intrudersTV.setText(String.format(parentActivity.getResources().getString(R.string.intruders_disp), p2intruders));
                 }
-
-
-
             }
         });
     }
 
+    private void resetDeckCards() {
+        getDeck().setCard1(null);
+        getDeck().setCard2(null);
+    }
+
+    private void resetAdapterPositions() {
+        getCardAdapter().setPositionImage1(null);
+        getCardAdapter().setPositionImage2(null);
+    }
+
     public GridView getGrid() {
         return gameGrid;
-    }
-
-    public int getLevel() {
-        return level;
-    }
-
-    public void setLevel(int level) {
-        this.level = level;
     }
 
     public Deck getDeck() {

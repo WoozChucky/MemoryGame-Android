@@ -1,12 +1,13 @@
 package pt.nunolevezinho.isec.jogodamemoria.Classes.GameObjects;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 
 /**
  * Created by nunol on 1/5/2016.
  */
-public class Deck {
+public class Deck implements Serializable {
 
     private ArrayList<Card> cards;
     private int numCards;
